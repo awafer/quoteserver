@@ -4,15 +4,20 @@
  */
 
 #include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
+//#include <sys/socket.h>
+//#include <netinet/in.h>
+//#include <arpa/inet.h>
+//#include <netdb.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <unistd.h>
+#include <stdbool.h>
+//#include <unistd.h>
+
+#include <WinSock2.h>
+#include <WS2tcpip.h>
+#pragma comment (lib, "ws2_32.lib")
 
 #define QUOTE_SERVER_PORT     "4356"
 #define MAX_MESSAGE_SIZE       256
@@ -20,7 +25,7 @@
 #define YOUR_QUOTATION_PLEASE  2
 #define QUIT                   0
 
-typedef enum { false, true } bool;
+//typedef enum { false, true } bool;
 
 int get_option();
 void error(char *msg);
@@ -62,7 +67,7 @@ int main(int argc, char **argv)
 			continue;
 
 		if (connect(sock_fd, rptr->ai_addr, rptr->ai_addrlen) == -1) {
-			if (close(sock_fd) == -1)
+			if (closesocket(sock_fd) == -1)
 				error("close");
 			continue;
 		}
